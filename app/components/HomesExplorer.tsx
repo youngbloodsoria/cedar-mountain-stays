@@ -36,6 +36,7 @@ export function HomesExplorer() {
   const [properties, setProperties] = useState<PublicProperty[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [location, setLocation] = useState("All Locations");
   const [bedrooms, setBedrooms] = useState(0);
   const [guests, setGuests] = useState(0);
   const [activeFilters, setActiveFilters] = useState<Record<FilterKey, boolean>>({
@@ -87,13 +88,33 @@ export function HomesExplorer() {
 
       const matchesBedrooms = bedrooms === 0 || property.bedrooms >= bedrooms;
       const matchesGuests = guests === 0 || property.sleeps >= guests;
+      const matchesLocation =
+        location === "All Locations" || property.location === location;
       const matchesFilters = selectedFilters.every(
         (key) => property.filters[key]
       );
 
-      return matchesQuery && matchesBedrooms && matchesGuests && matchesFilters;
+      return (
+        matchesQuery &&
+        matchesBedrooms &&
+        matchesGuests &&
+        matchesLocation &&
+        matchesFilters
+      );
     });
-  }, [activeFilters, bedrooms, guests, properties, query]);
+  }, [activeFilters, bedrooms, guests, location, properties, query]);
+
+  const locationOptions = useMemo(() => {
+    const discovered = Array.from(
+      new Set(properties.map((property) => property.location).filter(Boolean))
+    );
+    const preferred = ["Brian Head", "Panguitch Lake", "Duck Creek"];
+    return [
+      "All Locations",
+      ...preferred,
+      ...discovered.filter((item) => !preferred.includes(item)),
+    ];
+  }, [properties]);
 
   function toggleFilter(key: FilterKey) {
     setActiveFilters((current) => ({
@@ -122,13 +143,14 @@ export function HomesExplorer() {
             </h1>
           </div>
           <p className="max-w-md text-sm leading-7 text-white/72">
-            Handpicked Brian Head stays with direct SkyRun booking links.
+            Handpicked mountain stays with full profiles and secure booking
+            handled through our partner platform.
           </p>
         </div>
       </header>
 
       <section className="sticky top-0 z-20 border-b border-charcoal/10 bg-cream/95 px-5 py-4 backdrop-blur sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-[1480px] gap-3 lg:grid-cols-[1.2fr_0.4fr_0.4fr_1.5fr]">
+        <div className="mx-auto grid max-w-[1480px] gap-3 lg:grid-cols-[1.1fr_0.55fr_0.45fr_0.45fr_1.45fr]">
           <label className="relative block">
             <span className="sr-only">Search homes</span>
             <Search
@@ -141,6 +163,21 @@ export function HomesExplorer() {
               placeholder="Search homes"
               className="h-12 w-full rounded border border-charcoal/12 bg-white pl-11 pr-4 text-sm outline-none transition focus:border-cedar"
             />
+          </label>
+
+          <label>
+            <span className="sr-only">Location</span>
+            <select
+              value={location}
+              onChange={(event) => setLocation(event.target.value)}
+              className="h-12 w-full rounded border border-charcoal/12 bg-white px-4 text-sm font-semibold outline-none transition focus:border-cedar"
+            >
+              {locationOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label>
@@ -203,15 +240,9 @@ export function HomesExplorer() {
                 ? "Loading homes..."
                 : `${filteredProperties.length} homes found`}
             </p>
-            <a
-              href="https://skyrun.com/brian-head/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.12em] text-cedar transition hover:text-forest"
-            >
-              SkyRun Brian Head
-              <ExternalLink className="h-4 w-4" aria-hidden="true" />
-            </a>
+            <span className="text-xs font-extrabold uppercase tracking-[0.12em] text-cedar">
+              Full profiles open on the booking site
+            </span>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3">
@@ -229,6 +260,7 @@ export function HomesExplorer() {
                 type="button"
                 onClick={() => {
                   setQuery("");
+                  setLocation("All Locations");
                   setBedrooms(0);
                   setGuests(0);
                   setActiveFilters({
@@ -330,7 +362,7 @@ function PropertyCard({ property }: { property: PublicProperty }) {
           target="_blank"
           className="mt-5 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.12em] text-cedar transition hover:text-forest"
         >
-          View on SkyRun
+          View full profile and book
           <ExternalLink className="h-4 w-4" aria-hidden="true" />
         </a>
       </div>

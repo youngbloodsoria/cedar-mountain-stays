@@ -9,7 +9,8 @@ const fallbackHomes: PublicProperty[] = [
     id: 1,
     name: "Ridgeview Chalet",
     description: "A mountain retreat close to Southern Utah adventure.",
-    bookingUrl: "https://brianhead.skyrun.com/",
+    bookingUrl: "https://skyrun.com/brian-head/",
+    location: "Brian Head",
     imageUrl:
       "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=85",
     imageAlt: "Cabin tucked into a snowy forest at dusk",
@@ -35,7 +36,8 @@ const fallbackHomes: PublicProperty[] = [
     id: 2,
     name: "The Ponderosa",
     description: "A warm cabin stay built around mountain days.",
-    bookingUrl: "https://brianhead.skyrun.com/",
+    bookingUrl: "https://skyrun.com/brian-head/",
+    location: "Brian Head",
     imageUrl:
       "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
     imageAlt: "Modern mountain home glowing at dusk",
@@ -61,7 +63,8 @@ const fallbackHomes: PublicProperty[] = [
     id: 3,
     name: "Aspen Ridge Cabin",
     description: "A quiet basecamp for Brian Head exploration.",
-    bookingUrl: "https://brianhead.skyrun.com/",
+    bookingUrl: "https://skyrun.com/brian-head/",
+    location: "Brian Head",
     imageUrl:
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
     imageAlt: "A-frame mountain cabin with outdoor fire",
@@ -137,7 +140,7 @@ export function FeaturedHomes() {
               href={home.bookingUrl}
               rel="noopener noreferrer"
               target="_blank"
-              aria-label={`View ${home.name} on SkyRun`}
+              aria-label={`View the full profile and book ${home.name}`}
             >
               <div
                 aria-hidden="true"
@@ -190,7 +193,7 @@ export function FeaturedHomes() {
                 target="_blank"
                 className="mt-5 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.12em] text-cedar transition hover:text-forest"
               >
-                View on SkyRun
+                View full profile and book
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>

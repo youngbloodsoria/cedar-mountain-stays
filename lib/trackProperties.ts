@@ -27,6 +27,7 @@ type TrackUnit = {
   longDescription?: string | null;
   channelDescription?: string | null;
   websiteUrl?: string | null;
+  locality?: string | null;
   maxOccupancy?: number | null;
   bedrooms?: number | null;
   fullBathrooms?: number | null;
@@ -52,6 +53,7 @@ export type PublicProperty = {
   name: string;
   description: string;
   bookingUrl: string;
+  location: string;
   imageUrl: string;
   imageAlt: string;
   images: PublicPropertyImage[];
@@ -125,6 +127,29 @@ function normalizeBookingUrl(url: string | null | undefined): string {
   } catch {
     return "https://skyrun.com/brian-head/";
   }
+}
+
+function normalizeLocation(unit: TrackUnit): string {
+  const locationText = [
+    unit.locality,
+    unit.name,
+    unit.shortName,
+    unit.longDescription,
+    unit.channelDescription,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  if (locationText.includes("panguitch")) {
+    return "Panguitch Lake";
+  }
+
+  if (locationText.includes("duck creek")) {
+    return "Duck Creek";
+  }
+
+  return unit.locality?.trim() || "Brian Head";
 }
 
 function stringFromCustom(custom: TrackUnit["custom"], key: string): string {
@@ -252,14 +277,18 @@ async function fetchUnitImages(
     return [];
   }
 
-  const payload = await trackFetch<TrackCollection<TrackImage>>(
-    pathFromTrackHref(href)
-  );
-  const images = rowsFromCollection(payload, "images")
-    .filter((image) => image.url)
-    .sort((a, b) => numberValue(a.order) - numberValue(b.order));
+  try {
+    const payload = await trackFetch<TrackCollection<TrackImage>>(
+      pathFromTrackHref(href)
+    );
+    const images = rowsFromCollection(payload, "images")
+      .filter((image) => image.url)
+      .sort((a, b) => numberValue(a.order) - numberValue(b.order));
 
-  return images.slice(0, limit);
+    return images.slice(0, limit);
+  } catch {
+    return [];
+  }
 }
 
 async function fetchUnits(): Promise<TrackUnit[]> {
@@ -301,6 +330,7 @@ function toPublicProperty(unit: TrackUnit, images: TrackImage[]): PublicProperty
     name: unit.name?.trim() || unit.shortName?.trim() || "Brian Head Retreat",
     description: descriptionFor(unit),
     bookingUrl: normalizeBookingUrl(unit.websiteUrl),
+    location: normalizeLocation(unit),
     imageUrl: primaryImage?.url || FALLBACK_IMAGE,
     imageAlt: imageAlt(unit, primaryImage),
     images: publicImages,
