@@ -1,12 +1,57 @@
 import type { Metadata } from "next";
-import { FullIncomeEstimator } from "../components/FullIncomeEstimator";
+import Link from "next/link";
+import { ArrowLeft, ExternalLink } from "lucide-react";
+
+const estimatorUrl = "https://skyrun-income-estimator.vercel.app/";
 
 export const metadata: Metadata = {
   title: "Income Estimator | Cedar Mountain Stays",
   description:
-    "Explore directional income potential for a Southern Utah mountain home.",
+    "Open the private vacation rental income estimator for Southern Utah mountain homes.",
 };
 
 export default function IncomeEstimatorPage() {
-  return <FullIncomeEstimator />;
+  return (
+    <main className="min-h-screen bg-cream text-charcoal">
+      <header className="bg-forest px-5 py-6 text-white sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1480px] flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <Link
+              href="/"
+              className="mb-6 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.14em] text-white/70 transition hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Cedar Mountain Stays
+            </Link>
+            <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.18em] text-aspen">
+              Owner Income Estimator
+            </p>
+            <h1 className="font-serif text-4xl font-semibold leading-tight sm:text-5xl">
+              Build your private estimate.
+            </h1>
+          </div>
+          <a
+            href={estimatorUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded border border-white/30 px-5 py-3 text-xs font-extrabold uppercase tracking-[0.12em] text-white transition hover:bg-white hover:text-forest"
+          >
+            Open in new tab
+            <ExternalLink className="h-4 w-4" aria-hidden="true" />
+          </a>
+        </div>
+      </header>
+
+      <section className="px-3 py-3 sm:px-5 sm:py-5">
+        <div className="mx-auto max-w-[1480px] overflow-hidden rounded-lg border border-charcoal/10 bg-white shadow-soft">
+          <iframe
+            src={estimatorUrl}
+            title="Vacation rental income estimator"
+            className="h-[calc(100vh-190px)] min-h-[760px] w-full"
+            allow="clipboard-write"
+          />
+        </div>
+      </section>
+    </main>
+  );
 }
