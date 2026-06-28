@@ -33,6 +33,11 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# reserved Track API development files
+lib/env.ts
+lib/trackClient.ts
+app/api/track/health/route.ts
+
 # vercel
 .vercel
 
