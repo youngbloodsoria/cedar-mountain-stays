@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import { SiteNav } from "../components/SiteNav";
 
 const estimatorUrl = "https://skyrun-income-estimator.vercel.app/";
 
@@ -14,15 +14,9 @@ export default function IncomeEstimatorPage() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
       <header className="bg-forest px-5 py-6 text-white sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-[1480px] flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <SiteNav />
+        <div className="mx-auto mt-12 flex max-w-[1480px] flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <Link
-              href="/"
-              className="mb-6 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.14em] text-white/70 transition hover:text-white"
-            >
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Cedar Mountain Stays
-            </Link>
             <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.18em] text-aspen">
               Owner Income Estimator
             </p>
