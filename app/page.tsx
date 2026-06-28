@@ -18,6 +18,7 @@ import {
   Trees,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 import { FeaturedHomes } from "./components/FeaturedHomes";
 import { IncomeEstimator } from "./components/IncomeEstimator";
 
@@ -217,13 +218,13 @@ export default function Home() {
               inspected and professionally managed to ensure an exceptional
               experience.
             </p>
-            <a
-              href="#"
+            <Link
+              href="/homes"
               className="mt-10 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.14em] text-cedar transition hover:text-forest"
             >
               View all homes
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </a>
+            </Link>
           </div>
 
           <FeaturedHomes />

@@ -3,9 +3,17 @@ import { getFeaturedProperties } from "@/lib/trackProperties";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const properties = await getFeaturedProperties(6);
+    const { searchParams } = new URL(request.url);
+    const limitParam = searchParams.get("limit");
+    const imageParam = searchParams.get("images");
+    const limit = limitParam === "all" ? 80 : Number(limitParam ?? 6);
+    const imageLimit = Number(imageParam ?? 1);
+    const properties = await getFeaturedProperties(
+      Number.isFinite(limit) ? limit : 6,
+      Number.isFinite(imageLimit) ? imageLimit : 1
+    );
 
     return NextResponse.json(
       {

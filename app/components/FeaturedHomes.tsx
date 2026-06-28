@@ -13,10 +13,23 @@ const fallbackHomes: PublicProperty[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=85",
     imageAlt: "Cabin tucked into a snowy forest at dusk",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=85",
+        alt: "Cabin tucked into a snowy forest at dusk",
+      },
+    ],
     sleeps: 12,
     bedrooms: 4,
     bathrooms: 3.5,
     tags: ["Hot Tub", "Ski Access", "Pet Friendly"],
+    filters: {
+      petFriendly: true,
+      skiAccess: true,
+      cabin: true,
+      hotTub: true,
+      fireplace: false,
+    },
   },
   {
     id: 2,
@@ -26,10 +39,23 @@ const fallbackHomes: PublicProperty[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
     imageAlt: "Modern mountain home glowing at dusk",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+        alt: "Modern mountain home glowing at dusk",
+      },
+    ],
     sleeps: 10,
     bedrooms: 4,
     bathrooms: 3,
     tags: ["Hot Tub", "Game Room", "Fireplace"],
+    filters: {
+      petFriendly: false,
+      skiAccess: false,
+      cabin: true,
+      hotTub: true,
+      fireplace: true,
+    },
   },
   {
     id: 3,
@@ -39,10 +65,23 @@ const fallbackHomes: PublicProperty[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
     imageAlt: "A-frame mountain cabin with outdoor fire",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
+        alt: "A-frame mountain cabin with outdoor fire",
+      },
+    ],
     sleeps: 8,
     bedrooms: 3,
     bathrooms: 2,
     tags: ["Hot Tub", "Pet Friendly", "Fireplace"],
+    filters: {
+      petFriendly: true,
+      skiAccess: false,
+      cabin: true,
+      hotTub: true,
+      fireplace: true,
+    },
   },
 ];
 
@@ -53,7 +92,7 @@ type PropertiesResponse = {
 
 export function FeaturedHomes() {
   const [properties, setProperties] = useState<PublicProperty[]>(fallbackHomes);
-  const [isLive, setIsLive] = useState(false);
+  const [hasSkyRunHomes, setHasSkyRunHomes] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -67,11 +106,11 @@ export function FeaturedHomes() {
 
         if (isMounted && response.ok && data.ok && data.properties.length) {
           setProperties(data.properties.slice(0, 3));
-          setIsLive(true);
+          setHasSkyRunHomes(true);
         }
       } catch {
         if (isMounted) {
-          setIsLive(false);
+          setHasSkyRunHomes(false);
         }
       }
     }
@@ -87,7 +126,7 @@ export function FeaturedHomes() {
     <div>
       <div className="mb-4 flex items-center justify-end">
         <span className="rounded-full bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-cedar">
-          {isLive ? "Live SkyRun Homes" : "Featured Collection"}
+          {hasSkyRunHomes ? "SkyRun Homes" : "Featured Collection"}
         </span>
       </div>
       <div className="grid gap-5 md:grid-cols-3">

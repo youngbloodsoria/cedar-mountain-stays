@@ -24,6 +24,8 @@ type TrackUnit = {
   isBookable?: boolean;
   name?: string | null;
   shortName?: string | null;
+  longDescription?: string | null;
+  channelDescription?: string | null;
   websiteUrl?: string | null;
   maxOccupancy?: number | null;
   bedrooms?: number | null;
@@ -33,7 +35,16 @@ type TrackUnit = {
   maxPets?: number | null;
   amenityDescription?: string | null;
   custom?: Record<string, unknown> | null;
+  _embedded?: {
+    lodgingType?: { name?: string | null };
+    type?: { name?: string | null };
+  };
   _links?: TrackLinks;
+};
+
+export type PublicPropertyImage = {
+  url: string;
+  alt: string;
 };
 
 export type PublicProperty = {
@@ -43,10 +54,18 @@ export type PublicProperty = {
   bookingUrl: string;
   imageUrl: string;
   imageAlt: string;
+  images: PublicPropertyImage[];
   sleeps: number;
   bedrooms: number;
   bathrooms: number;
   tags: string[];
+  filters: {
+    petFriendly: boolean;
+    skiAccess: boolean;
+    cabin: boolean;
+    hotTub: boolean;
+    fireplace: boolean;
+  };
 };
 
 const FALLBACK_IMAGE =
@@ -96,16 +115,15 @@ function bathroomCount(unit: TrackUnit): number {
 
 function normalizeBookingUrl(url: string | null | undefined): string {
   if (!url) {
-    return "https://brianhead.skyrun.com/";
+    return "https://skyrun.com/brian-head/";
   }
 
   try {
     const parsed = new URL(url);
     parsed.protocol = "https:";
-    parsed.host = "brianhead.skyrun.com";
     return parsed.toString();
   } catch {
-    return "https://brianhead.skyrun.com/";
+    return "https://skyrun.com/brian-head/";
   }
 }
 
@@ -114,9 +132,13 @@ function stringFromCustom(custom: TrackUnit["custom"], key: string): string {
   return typeof value === "string" ? value : "";
 }
 
-function propertyTags(unit: TrackUnit): string[] {
-  const amenityText = [
+function amenityTextFor(unit: TrackUnit): string {
+  return [
     unit.amenityDescription,
+    unit.longDescription,
+    unit.channelDescription,
+    unit._embedded?.lodgingType?.name,
+    unit._embedded?.type?.name,
     stringFromCustom(unit.custom, "pms_units_pool_or_hot_tub_service_notes"),
     stringFromCustom(unit.custom, "pms_units_other_amenity_instructions"),
     stringFromCustom(unit.custom, "pms_units_fireplace_or_wood_stove_instructions"),
@@ -127,45 +149,107 @@ function propertyTags(unit: TrackUnit): string[] {
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
+}
 
+function propertyFilters(unit: TrackUnit): PublicProperty["filters"] {
+  const amenityText = amenityTextFor(unit);
+  const lodgingText = [
+    unit._embedded?.lodgingType?.name,
+    unit._embedded?.type?.name,
+    unit.name,
+    unit.shortName,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return {
+    hotTub: amenityText.includes("hot tub") || amenityText.includes("spa"),
+    skiAccess:
+      amenityText.includes("ski-in") ||
+      amenityText.includes("ski in") ||
+      amenityText.includes("ski access") ||
+      amenityText.includes("lift"),
+    petFriendly:
+      Boolean(unit.maxPets) ||
+      amenityText.includes("pet friendly") ||
+      amenityText.includes("pets allowed"),
+    fireplace:
+      amenityText.includes("fireplace") ||
+      amenityText.includes("wood stove") ||
+      amenityText.includes("fire pit"),
+    cabin:
+      lodgingText.includes("cabin") ||
+      lodgingText.includes("chalet") ||
+      lodgingText.includes("lodge") ||
+      lodgingText.includes("home") ||
+      lodgingText.includes("house"),
+  };
+}
+
+function propertyTags(unit: TrackUnit): string[] {
+  const filters = propertyFilters(unit);
   const tags: string[] = [];
 
-  if (amenityText.includes("hot tub") || amenityText.includes("spa")) {
+  if (filters.hotTub) {
     tags.push("Hot Tub");
   }
 
-  if (
-    amenityText.includes("ski-in") ||
-    amenityText.includes("ski in") ||
-    amenityText.includes("ski access") ||
-    amenityText.includes("lift")
-  ) {
+  if (filters.skiAccess) {
     tags.push("Ski Access");
   }
 
-  if (
-    unit.maxPets ||
-    amenityText.includes("pet friendly") ||
-    amenityText.includes("pets allowed")
-  ) {
+  if (filters.petFriendly) {
     tags.push("Pet Friendly");
   }
 
-  if (
-    amenityText.includes("fireplace") ||
-    amenityText.includes("wood stove") ||
-    amenityText.includes("fire pit")
-  ) {
+  if (filters.fireplace) {
     tags.push("Fireplace");
+  }
+
+  if (filters.cabin) {
+    tags.push("Cabin");
   }
 
   return tags.slice(0, 3);
 }
 
-async function fetchUnitImage(unit: TrackUnit): Promise<TrackImage | null> {
+function plainText(value: string | null | undefined): string {
+  return (value ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function descriptionFor(unit: TrackUnit): string {
+  const description =
+    plainText(unit.channelDescription) ||
+    plainText(unit.longDescription) ||
+    plainText(unit.shortName);
+
+  if (!description) {
+    return "A mountain retreat close to Southern Utah adventure.";
+  }
+
+  return description.length > 280
+    ? `${description.slice(0, 277).trim()}...`
+    : description;
+}
+
+function imageAlt(unit: TrackUnit, image: TrackImage | null): string {
+  return (
+    image?.caption?.trim() ||
+    `${unit.name || unit.shortName || "Brian Head retreat"} property photo`
+  );
+}
+
+async function fetchUnitImages(
+  unit: TrackUnit,
+  limit: number
+): Promise<TrackImage[]> {
   const href = unit._links?.images?.href;
   if (!href) {
-    return null;
+    return [];
   }
 
   const payload = await trackFetch<TrackCollection<TrackImage>>(
@@ -175,7 +259,7 @@ async function fetchUnitImage(unit: TrackUnit): Promise<TrackImage | null> {
     .filter((image) => image.url)
     .sort((a, b) => numberValue(a.order) - numberValue(b.order));
 
-  return images[0] ?? null;
+  return images.slice(0, limit);
 }
 
 async function fetchUnits(): Promise<TrackUnit[]> {
@@ -195,38 +279,55 @@ async function fetchUnits(): Promise<TrackUnit[]> {
   return units;
 }
 
-function toPublicProperty(unit: TrackUnit, image: TrackImage | null): PublicProperty {
+function toPublicProperty(unit: TrackUnit, images: TrackImage[]): PublicProperty {
   const bedrooms = numberValue(unit.bedrooms);
   const sleeps = numberValue(unit.maxOccupancy) || Math.max(bedrooms * 2, 1);
   const tags = propertyTags(unit);
+  const primaryImage = images[0] ?? null;
+  const publicImages = images.length
+    ? images.map((image) => ({
+        url: image.url || FALLBACK_IMAGE,
+        alt: imageAlt(unit, image),
+      }))
+    : [
+        {
+          url: FALLBACK_IMAGE,
+          alt: `${unit.name || unit.shortName || "Brian Head retreat"} property photo`,
+        },
+      ];
 
   return {
     id: unit.id,
     name: unit.name?.trim() || unit.shortName?.trim() || "Brian Head Retreat",
-    description:
-      unit.shortName?.trim() ||
-      "A mountain retreat close to Southern Utah adventure.",
+    description: descriptionFor(unit),
     bookingUrl: normalizeBookingUrl(unit.websiteUrl),
-    imageUrl: image?.url || FALLBACK_IMAGE,
-    imageAlt:
-      image?.caption?.trim() ||
-      `${unit.name || unit.shortName || "Brian Head retreat"} property photo`,
+    imageUrl: primaryImage?.url || FALLBACK_IMAGE,
+    imageAlt: imageAlt(unit, primaryImage),
+    images: publicImages,
     sleeps,
     bedrooms,
     bathrooms: bathroomCount(unit),
     tags: tags.length ? tags : ["Brian Head", "Mountain Stay"],
+    filters: propertyFilters(unit),
   };
 }
 
-export async function getFeaturedProperties(limit = 6): Promise<PublicProperty[]> {
+export async function getFeaturedProperties(
+  limit = 6,
+  imageLimit = 1
+): Promise<PublicProperty[]> {
+  const safeLimit = Math.min(Math.max(limit, 1), 80);
+  const safeImageLimit = Math.min(Math.max(imageLimit, 1), 5);
   const units = (await fetchUnits())
     .filter((unit) => unit.isActive !== false)
     .filter((unit) => unit.isBookable !== false)
     .filter((unit) => unit.websiteUrl)
-    .slice(0, limit);
+    .slice(0, safeLimit);
 
   const properties = await Promise.all(
-    units.map(async (unit) => toPublicProperty(unit, await fetchUnitImage(unit)))
+    units.map(async (unit) =>
+      toPublicProperty(unit, await fetchUnitImages(unit, safeImageLimit))
+    )
   );
 
   return properties;
