@@ -76,9 +76,9 @@ const operations = [
 const navItems = [
   ["Homes", "#homes"],
   ["Team", "/team"],
+  ["Why Cedar Mountain", "/why-cedar-mountain"],
   ["Destinations", "#destinations"],
   ["Experiences", "#experiences"],
-  ["About", "#about"],
   ["Owners", "#owners"],
 ];
 
@@ -109,7 +109,7 @@ export default function Home() {
             />
           </a>
 
-          <nav className="hidden items-center gap-10 text-xs font-extrabold uppercase tracking-[0.16em] text-white/90 lg:flex">
+          <nav className="hidden items-center gap-7 text-xs font-extrabold uppercase tracking-[0.14em] text-white/90 xl:flex">
             {navItems.map(([item, href]) => (
               <Link
                 key={item}
@@ -128,7 +128,7 @@ export default function Home() {
             >
               Explore Homes
             </a>
-            <button className="text-white" aria-label="Open menu" type="button">
+            <button className="text-white xl:hidden" aria-label="Open menu" type="button">
               <Menu className="h-7 w-7" aria-hidden="true" />
             </button>
           </div>
@@ -339,7 +339,7 @@ export default function Home() {
           </div>
 
           <FooterColumn title="Explore" links={["Homes", "Destinations", "Experiences"]} />
-          <FooterColumn title="Company" links={["About Us", "Owners", "Contact Us"]} />
+          <FooterColumn title="Company" links={["Team", "Why Cedar Mountain", "Owners", "Contact Us"]} />
 
           <div>
             <h3 className="text-xs font-extrabold uppercase tracking-[0.14em]">Stay In The Know</h3>

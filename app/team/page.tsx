@@ -132,21 +132,19 @@ export default function TeamPage() {
                 key={member.name}
                 className="overflow-hidden rounded bg-white shadow-sm"
               >
-                <div className="relative bg-stone px-6 pt-6">
+                <div className="relative overflow-hidden bg-stone px-3 pt-4">
                   <Image
                     src={member.image}
                     alt={`${member.name} illustration`}
-                    className="mx-auto aspect-[4/5] w-full object-contain object-bottom"
+                    className="mx-auto aspect-[4/5] w-full scale-110 object-contain object-bottom"
                     sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
                   />
-                  <div className="absolute bottom-3 right-3 rounded-full bg-forest/82 p-1.5 shadow-sm ring-1 ring-white/60 sm:p-2">
-                    <Image
-                      src={cedarLogo}
-                      alt=""
-                      aria-hidden="true"
-                      className="h-8 w-auto sm:h-10"
-                    />
-                  </div>
+                  <Image
+                    src={cedarLogo}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute bottom-2 right-3 h-14 w-auto drop-shadow-[0_8px_18px_rgba(16,37,31,0.45)] sm:h-16"
+                  />
                 </div>
                 <div className="p-6">
                   <div className="flex items-start justify-between gap-4">

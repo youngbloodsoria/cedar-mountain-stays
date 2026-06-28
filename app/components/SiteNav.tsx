@@ -5,6 +5,7 @@ import cedarLogo from "../../assets/team-page/cedarmountainstays-logo.png";
 const navItems = [
   ["Homes", "/homes"],
   ["Team", "/team"],
+  ["Why Cedar Mountain", "/why-cedar-mountain"],
   ["Destinations", "/#destinations"],
   ["Experiences", "/#experiences"],
   ["About", "/#about"],
