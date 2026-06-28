@@ -1,13 +1,10 @@
 import {
   ArrowRight,
   BarChart3,
-  Bath,
-  BedDouble,
   Bike,
   Camera,
   ClipboardCheck,
   Fish,
-  Heart,
   Home as HomeIcon,
   LockKeyhole,
   Menu,
@@ -21,6 +18,7 @@ import {
   Trees,
   Users,
 } from "lucide-react";
+import { FeaturedHomes } from "./components/FeaturedHomes";
 import { IncomeEstimator } from "./components/IncomeEstimator";
 
 const destinationCards = [
@@ -53,36 +51,6 @@ const destinationCards = [
     line: "Adventure awaits",
     image:
       "https://images.unsplash.com/photo-1534384853875-30a7f2147e2c?auto=format&fit=crop&w=1200&q=85",
-  },
-];
-
-const homes = [
-  {
-    name: "Ridgeview Chalet",
-    guests: 12,
-    bedrooms: 4,
-    baths: 3.5,
-    tags: ["Hot Tub", "Ski Access", "Pet Friendly"],
-    image:
-      "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=85",
-  },
-  {
-    name: "The Ponderosa",
-    guests: 10,
-    bedrooms: 4,
-    baths: 3,
-    tags: ["Hot Tub", "Game Room", "Fire Pit"],
-    image:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
-  },
-  {
-    name: "Aspen Ridge Cabin",
-    guests: 8,
-    bedrooms: 3,
-    baths: 2,
-    tags: ["Hot Tub", "Pet Friendly", "Fireplace"],
-    image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
   },
 ];
 
@@ -258,52 +226,7 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-3">
-            {homes.map((home) => (
-              <article key={home.name} className="overflow-hidden rounded bg-white shadow-sm">
-                <div className="group relative h-64 overflow-hidden">
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105"
-                    style={{ backgroundImage: `url('${home.image}')` }}
-                  />
-                  <button
-                    aria-label={`Save ${home.name}`}
-                    className="absolute right-4 top-4 rounded-full text-white drop-shadow"
-                    type="button"
-                  >
-                    <Heart className="h-6 w-6" aria-hidden="true" />
-                  </button>
-                </div>
-                <div className="p-5">
-                  <h3 className="text-lg font-extrabold uppercase tracking-[0.07em] text-charcoal">
-                    {home.name}
-                  </h3>
-                  <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-charcoal/70">
-                    <span className="inline-flex items-center gap-1">
-                      <Users className="h-3.5 w-3.5 text-cedar" aria-hidden="true" />
-                      {home.guests} Guests
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <BedDouble className="h-3.5 w-3.5 text-cedar" aria-hidden="true" />
-                      {home.bedrooms} Bedrooms
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Bath className="h-3.5 w-3.5 text-cedar" aria-hidden="true" />
-                      {home.baths} Baths
-                    </span>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {home.tags.map((tag) => (
-                      <span key={tag} className="rounded bg-stone px-3 py-1.5 text-xs text-charcoal/80">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+          <FeaturedHomes />
         </div>
       </section>
 
