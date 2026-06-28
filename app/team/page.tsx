@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image, { type StaticImageData } from "next/image";
 import { ExternalLink, Mail, MapPin } from "lucide-react";
 import { SiteNav } from "../components/SiteNav";
-import teamCartoon from "../../assets/team-page/skyrun-team-cartoon-active.png";
+import teamPhoto from "../../assets/team-page/team-photo-2-cropped.png";
+import cedarLogo from "../../assets/team-page/cedarmountainstays-logo.png";
 import paulaCartoon from "../../assets/team-page/paula-cartoon.png";
 import alexCartoon from "../../assets/team-page/alex-cartoon.png";
 import mattCartoon from "../../assets/team-page/matt-cartoon.png";
@@ -60,12 +61,12 @@ export default function TeamPage() {
     <main className="min-h-screen bg-cream text-charcoal">
       <header className="bg-forest px-5 py-6 text-white sm:px-8 lg:px-12">
         <SiteNav />
-        <div className="mx-auto grid max-w-[1480px] gap-10 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div className="mx-auto grid max-w-[1480px] gap-10 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-16">
           <div>
             <p className="mb-4 text-xs font-extrabold uppercase tracking-[0.2em] text-aspen">
               Local Hospitality Team
             </p>
-            <h1 className="font-serif text-5xl font-semibold leading-tight sm:text-6xl">
+            <h1 className="font-serif text-4xl font-semibold leading-tight sm:text-6xl">
               Mountain stays, cared for by people who live the work.
             </h1>
             <p className="mt-6 max-w-xl text-base leading-8 text-white/76 sm:text-lg">
@@ -86,14 +87,24 @@ export default function TeamPage() {
             </div>
           </div>
 
-          <div className="rounded-lg bg-white/8 p-4 shadow-soft ring-1 ring-white/12">
+          <div className="relative overflow-hidden rounded-lg bg-white/8 p-3 shadow-soft ring-1 ring-white/12">
             <Image
-              src={teamCartoon}
-              alt="Cedar Mountain Stays team illustration"
+              src={teamPhoto}
+              alt="Cedar Mountain Stays team"
               priority
-              className="h-auto w-full rounded object-cover"
+              className="aspect-[31/26] h-full w-full rounded object-cover object-center"
               sizes="(min-width: 1024px) 50vw, 100vw"
             />
+            <div className="absolute inset-x-0 bottom-5 flex justify-center sm:bottom-6">
+              <div className="rounded-full bg-forest/72 px-3 py-1.5 shadow-soft ring-1 ring-white/18 backdrop-blur-sm sm:px-4 sm:py-2">
+                <Image
+                  src={cedarLogo}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-12 w-auto sm:h-16"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -121,13 +132,21 @@ export default function TeamPage() {
                 key={member.name}
                 className="overflow-hidden rounded bg-white shadow-sm"
               >
-                <div className="bg-stone px-6 pt-6">
+                <div className="relative bg-stone px-6 pt-6">
                   <Image
                     src={member.image}
                     alt={`${member.name} illustration`}
-                    className="mx-auto h-72 w-full object-contain object-bottom"
+                    className="mx-auto aspect-[4/5] w-full object-contain object-bottom"
                     sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
                   />
+                  <div className="absolute bottom-3 right-3 rounded-full bg-forest/82 p-1.5 shadow-sm ring-1 ring-white/60 sm:p-2">
+                    <Image
+                      src={cedarLogo}
+                      alt=""
+                      aria-hidden="true"
+                      className="h-8 w-auto sm:h-10"
+                    />
+                  </div>
                 </div>
                 <div className="p-6">
                   <div className="flex items-start justify-between gap-4">

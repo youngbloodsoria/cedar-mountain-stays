@@ -23,12 +23,12 @@ export function SiteNav() {
         <Image
           src={cedarLogo}
           alt="Cedar Mountain Stays"
-          className="h-20 w-auto sm:h-24"
+          className="h-16 w-auto sm:h-24"
           priority
         />
       </Link>
 
-      <nav className="flex flex-wrap gap-x-6 gap-y-3 text-xs font-extrabold uppercase tracking-[0.14em] text-white/74">
+      <nav className="flex flex-wrap gap-x-4 gap-y-3 text-[0.68rem] font-extrabold uppercase tracking-[0.12em] text-white/74 sm:gap-x-6 sm:text-xs sm:tracking-[0.14em]">
         {navItems.map(([label, href]) => (
           <Link key={label} className="transition hover:text-white" href={href}>
             {label}
