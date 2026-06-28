@@ -9,16 +9,17 @@ import {
   LockKeyhole,
   Menu,
   MessageCircle,
-  Mountain,
   PawPrint,
   ShieldCheck,
   Snowflake,
   TentTree,
   TrendingUp,
-  Trees,
   Users,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import homepageHero from "../assets/home-page/hompage-hero.png";
+import cedarLogo from "../assets/team-page/cedarmountainstays-logo.png";
 import { FeaturedHomes } from "./components/FeaturedHomes";
 import { IncomeEstimator } from "./components/IncomeEstimator";
 
@@ -72,19 +73,27 @@ const operations = [
   ["Performance Analytics", "Data-driven decisions for better results and growth.", TrendingUp],
 ];
 
-const navItems = ["Homes", "Destinations", "Experiences", "About", "Owners"];
+const navItems = [
+  ["Homes", "#homes"],
+  ["Team", "/team"],
+  ["Destinations", "#destinations"],
+  ["Experiences", "#experiences"],
+  ["About", "#about"],
+  ["Owners", "#owners"],
+];
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
       <section className="relative min-h-[92vh] overflow-hidden bg-forest text-white">
-        <div
+        <Image
+          src={homepageHero}
+          alt=""
           aria-hidden="true"
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=2400&q=90')",
-          }}
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div
           aria-hidden="true"
@@ -92,25 +101,23 @@ export default function Home() {
         />
 
         <header className="relative z-10 mx-auto flex max-w-[1480px] items-center justify-between px-6 py-8 sm:px-10 lg:px-16">
-          <a className="flex items-center gap-3" href="#" aria-label="Cedar Mountain Stays home">
-            <span className="relative flex h-12 w-10 items-center justify-center">
-              <Mountain className="absolute top-0 h-7 w-7" aria-hidden="true" />
-              <Trees className="absolute bottom-0 h-8 w-8" aria-hidden="true" />
-            </span>
-            <span className="max-w-[130px] text-lg font-extrabold uppercase leading-[0.95] tracking-[0.18em]">
-              Cedar Mountain Stays
-            </span>
+          <a className="inline-flex items-center" href="#" aria-label="Cedar Mountain Stays home">
+            <Image
+              src={cedarLogo}
+              alt="Cedar Mountain Stays"
+              className="h-20 w-auto sm:h-24"
+            />
           </a>
 
           <nav className="hidden items-center gap-10 text-xs font-extrabold uppercase tracking-[0.16em] text-white/90 lg:flex">
-            {navItems.map((item) => (
-              <a
+            {navItems.map(([item, href]) => (
+              <Link
                 key={item}
                 className="transition hover:text-aspen"
-                href={item === "Owners" ? "#owners" : `#${item.toLowerCase()}`}
+                href={href}
               >
                 {item}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -314,14 +321,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-forest/82" aria-hidden="true" />
         <div className="relative mx-auto grid max-w-[1480px] gap-10 border-b border-white/12 pb-10 lg:grid-cols-[1.2fr_0.6fr_0.7fr_1.1fr]">
           <div>
-            <a className="flex items-center gap-3" href="#" aria-label="Cedar Mountain Stays home">
-              <span className="relative flex h-12 w-10 items-center justify-center">
-                <Mountain className="absolute top-0 h-7 w-7" aria-hidden="true" />
-                <Trees className="absolute bottom-0 h-8 w-8" aria-hidden="true" />
-              </span>
-              <span className="max-w-[130px] text-lg font-extrabold uppercase leading-[0.95] tracking-[0.18em]">
-                Cedar Mountain Stays
-              </span>
+            <a className="inline-flex items-center" href="#" aria-label="Cedar Mountain Stays home">
+              <Image
+                src={cedarLogo}
+                alt="Cedar Mountain Stays"
+                className="h-20 w-auto sm:h-24"
+              />
             </a>
             <p className="mt-6 max-w-56 text-sm leading-6 text-white/82">
               Your basecamp for adventure in Southern Utah.

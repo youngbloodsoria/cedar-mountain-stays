@@ -1,8 +1,10 @@
-import { Mountain, Trees } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import cedarLogo from "../../assets/team-page/cedarmountainstays-logo.png";
 
 const navItems = [
   ["Homes", "/homes"],
+  ["Team", "/team"],
   ["Destinations", "/#destinations"],
   ["Experiences", "/#experiences"],
   ["About", "/#about"],
@@ -14,17 +16,16 @@ export function SiteNav() {
   return (
     <div className="mx-auto flex max-w-[1480px] flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
       <Link
-        className="flex items-center gap-3"
+        className="inline-flex items-center"
         href="/"
         aria-label="Cedar Mountain Stays home"
       >
-        <span className="relative flex h-12 w-10 items-center justify-center">
-          <Mountain className="absolute top-0 h-7 w-7" aria-hidden="true" />
-          <Trees className="absolute bottom-0 h-8 w-8" aria-hidden="true" />
-        </span>
-        <span className="max-w-[130px] text-lg font-extrabold uppercase leading-[0.95] tracking-[0.18em]">
-          Cedar Mountain Stays
-        </span>
+        <Image
+          src={cedarLogo}
+          alt="Cedar Mountain Stays"
+          className="h-20 w-auto sm:h-24"
+          priority
+        />
       </Link>
 
       <nav className="flex flex-wrap gap-x-6 gap-y-3 text-xs font-extrabold uppercase tracking-[0.14em] text-white/74">
