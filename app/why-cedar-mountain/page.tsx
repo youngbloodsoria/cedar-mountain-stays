@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   BarChart3,
@@ -19,7 +18,8 @@ import {
   Users,
   Wrench,
 } from "lucide-react";
-import cedarLogo from "../../assets/team-page/cedarmountainstays-logo.png";
+import { SiteFooter } from "../components/SiteFooter";
+import { SiteHeader } from "../components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "Why Cedar Mountain | Cedar Mountain Stays",
@@ -39,14 +39,6 @@ const ownerImage =
   "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1400&q=85";
 const ctaImage =
   "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1800&q=85";
-
-const navItems = [
-  ["Homes", "/homes"],
-  ["Owners", "/#owners"],
-  ["Why Cedar Mountain", "/why-cedar-mountain"],
-  ["About", "/team"],
-  ["Contact", "mailto:hello@cedarmountainstays.com"],
-];
 
 const housekeepingItems = [
   { label: "Cleanliness", icon: Sparkles },
@@ -104,29 +96,9 @@ export default function WhyCedarMountainPage() {
           className="absolute inset-0 bg-[linear-gradient(90deg,#f7f4ee_0%,rgba(247,244,238,0.96)_34%,rgba(247,244,238,0.45)_58%,rgba(247,244,238,0.04)_100%)]"
         />
 
-        <header className="relative z-10 mx-auto flex max-w-[1480px] flex-col gap-5 px-5 py-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-12">
-          <Link href="/" aria-label="Cedar Mountain Stays home">
-            <Image
-              src={cedarLogo}
-              alt="Cedar Mountain Stays"
-              priority
-              className="h-20 w-auto"
-            />
-          </Link>
-          <nav className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-extrabold uppercase tracking-[0.12em] text-forest">
-            {navItems.map(([label, href]) => (
-              <Link key={label} href={href} className="transition hover:text-cedar">
-                {label}
-              </Link>
-            ))}
-          </nav>
-          <Link
-            href="/homes"
-            className="inline-flex w-fit items-center justify-center rounded bg-cedar px-6 py-4 text-xs font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-aspen hover:text-forest"
-          >
-            Book Your Stay
-          </Link>
-        </header>
+        <div className="relative z-10">
+          <SiteHeader tone="light" />
+        </div>
 
         <div className="relative z-10 mx-auto grid min-h-[760px] max-w-[1480px] items-center gap-10 px-5 pb-16 pt-8 sm:px-8 lg:grid-cols-[0.58fr_0.42fr] lg:px-12">
           <div className="max-w-2xl">
@@ -287,13 +259,13 @@ export default function WhyCedarMountainPage() {
           </p>
           <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
             <Link
-              href="mailto:hello@cedarmountainstays.com?subject=Property%20Consultation"
+              href="mailto:brianhead@skyrun.com?subject=Property%20Consultation"
               className="inline-flex items-center justify-center rounded bg-cedar px-7 py-4 text-xs font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-aspen hover:text-forest"
             >
               Schedule a Property Consultation
             </Link>
             <Link
-              href="mailto:hello@cedarmountainstays.com"
+              href="mailto:brianhead@skyrun.com"
               className="inline-flex items-center justify-center rounded border border-white/70 px-7 py-4 text-xs font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-white hover:text-forest"
             >
               Contact Us
@@ -301,6 +273,7 @@ export default function WhyCedarMountainPage() {
           </div>
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }

@@ -2,15 +2,11 @@ import {
   ArrowRight,
   BarChart3,
   Bike,
-  Camera,
   ClipboardCheck,
   Fish,
-  Home as HomeIcon,
   LockKeyhole,
-  Menu,
   MessageCircle,
   PawPrint,
-  ShieldCheck,
   Snowflake,
   TentTree,
   TrendingUp,
@@ -19,9 +15,10 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import homepageHero from "../assets/home-page/hompage-hero.png";
-import cedarLogo from "../assets/team-page/cedarmountainstays-logo.png";
 import { FeaturedHomes } from "./components/FeaturedHomes";
 import { IncomeEstimator } from "./components/IncomeEstimator";
+import { SiteFooter } from "./components/SiteFooter";
+import { SiteNav } from "./components/SiteNav";
 
 const destinationCards = [
   {
@@ -73,15 +70,6 @@ const operations = [
   ["Performance Analytics", "Data-driven decisions for better results and growth.", TrendingUp],
 ];
 
-const navItems = [
-  ["Homes", "#homes"],
-  ["Team", "/team"],
-  ["Why Cedar Mountain", "/why-cedar-mountain"],
-  ["Destinations", "#destinations"],
-  ["Experiences", "#experiences"],
-  ["Owners", "#owners"],
-];
-
 export default function Home() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
@@ -100,38 +88,8 @@ export default function Home() {
           className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,37,31,0.78)_0%,rgba(16,37,31,0.43)_44%,rgba(16,37,31,0.08)_100%),linear-gradient(180deg,rgba(16,37,31,0.52)_0%,rgba(16,37,31,0.08)_42%,rgba(16,37,31,0.38)_100%)]"
         />
 
-        <header className="relative z-10 mx-auto flex max-w-[1480px] items-center justify-between px-6 py-8 sm:px-10 lg:px-16">
-          <a className="inline-flex items-center" href="#" aria-label="Cedar Mountain Stays home">
-            <Image
-              src={cedarLogo}
-              alt="Cedar Mountain Stays"
-              className="h-20 w-auto sm:h-24"
-            />
-          </a>
-
-          <nav className="hidden items-center gap-7 text-xs font-extrabold uppercase tracking-[0.14em] text-white/90 xl:flex">
-            {navItems.map(([item, href]) => (
-              <Link
-                key={item}
-                className="transition hover:text-aspen"
-                href={href}
-              >
-                {item}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-5">
-            <a
-              href="#homes"
-              className="hidden rounded bg-cedar px-6 py-4 text-xs font-extrabold uppercase tracking-[0.08em] text-white transition hover:bg-aspen hover:text-forest sm:inline-flex"
-            >
-              Explore Homes
-            </a>
-            <button className="text-white xl:hidden" aria-label="Open menu" type="button">
-              <Menu className="h-7 w-7" aria-hidden="true" />
-            </button>
-          </div>
+        <header className="relative z-10 px-6 py-8 sm:px-10 lg:px-16">
+          <SiteNav />
         </header>
 
         <div className="relative z-10 mx-auto flex min-h-[calc(92vh-116px)] max-w-[1480px] items-center px-6 pb-20 sm:px-10 lg:px-16">
@@ -309,86 +267,7 @@ export default function Home() {
 
       <IncomeEstimator />
 
-      <footer className="relative overflow-hidden bg-forest px-6 py-10 text-white sm:px-10 lg:px-16">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1800&q=80')",
-          }}
-        />
-        <div className="absolute inset-0 bg-forest/82" aria-hidden="true" />
-        <div className="relative mx-auto grid max-w-[1480px] gap-10 border-b border-white/12 pb-10 lg:grid-cols-[1.2fr_0.6fr_0.7fr_1.1fr]">
-          <div>
-            <a className="inline-flex items-center" href="#" aria-label="Cedar Mountain Stays home">
-              <Image
-                src={cedarLogo}
-                alt="Cedar Mountain Stays"
-                className="h-20 w-auto sm:h-24"
-              />
-            </a>
-            <p className="mt-6 max-w-56 text-sm leading-6 text-white/82">
-              Your basecamp for adventure in Southern Utah.
-            </p>
-            <div className="mt-5 flex gap-4 text-aspen">
-              <Camera className="h-5 w-5" aria-hidden="true" />
-              <HomeIcon className="h-5 w-5" aria-hidden="true" />
-              <ShieldCheck className="h-5 w-5" aria-hidden="true" />
-            </div>
-          </div>
-
-          <FooterColumn title="Explore" links={["Homes", "Destinations", "Experiences"]} />
-          <FooterColumn title="Company" links={["Team", "Why Cedar Mountain", "Owners", "Contact Us"]} />
-
-          <div>
-            <h3 className="text-xs font-extrabold uppercase tracking-[0.14em]">Stay In The Know</h3>
-            <p className="mt-4 max-w-sm text-sm leading-6 text-white/75">
-              Get local tips, special offers, and adventure inspiration.
-            </p>
-            <form className="mt-5 flex gap-3">
-              <label className="sr-only" htmlFor="footer-email">
-                Email
-              </label>
-              <input
-                id="footer-email"
-                type="email"
-                placeholder="Enter your email"
-                className="min-w-0 flex-1 rounded border border-white/15 bg-white px-4 py-3 text-sm text-charcoal outline-none focus:border-aspen"
-              />
-              <button
-                className="rounded bg-cedar px-5 py-3 text-xs font-extrabold uppercase tracking-[0.08em] text-white transition hover:bg-aspen hover:text-forest"
-                type="submit"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
-        </div>
-
-        <div className="relative mx-auto flex max-w-[1480px] flex-col gap-4 pt-6 text-xs text-white/70 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Cedar Mountain Stays. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
-  );
-}
-
-function FooterColumn({ title, links }: { title: string; links: string[] }) {
-  return (
-    <nav className="lg:border-l lg:border-white/15 lg:pl-10" aria-label={title}>
-      <h3 className="text-xs font-extrabold uppercase tracking-[0.14em]">{title}</h3>
-      <div className="mt-5 grid gap-3 text-sm text-white/75">
-        {links.map((link) => (
-          <a key={link} className="transition hover:text-white" href="#">
-            {link}
-          </a>
-        ))}
-      </div>
-    </nav>
   );
 }

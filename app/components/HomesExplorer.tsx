@@ -13,7 +13,8 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { SiteNav } from "./SiteNav";
+import { SiteFooter } from "./SiteFooter";
+import { SiteHeader } from "./SiteHeader";
 import type { PublicProperty } from "@/lib/trackProperties";
 
 type PropertiesResponse = {
@@ -125,7 +126,7 @@ export function HomesExplorer() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
       <header className="border-b border-charcoal/10 bg-forest px-5 py-6 text-white sm:px-8 lg:px-12">
-        <SiteNav />
+        <SiteHeader className="px-0 py-0" />
         <div className="mx-auto mt-12 flex max-w-[1480px] flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.18em] text-aspen">
@@ -272,6 +273,7 @@ export function HomesExplorer() {
           ) : null}
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }

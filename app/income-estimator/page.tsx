@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ExternalLink } from "lucide-react";
-import { SiteNav } from "../components/SiteNav";
+import { SiteFooter } from "../components/SiteFooter";
+import { SiteHeader } from "../components/SiteHeader";
 
 const estimatorUrl = "https://skyrun-income-estimator.vercel.app/";
 
@@ -14,7 +15,7 @@ export default function IncomeEstimatorPage() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
       <header className="bg-forest px-5 py-6 text-white sm:px-8 lg:px-12">
-        <SiteNav />
+        <SiteHeader className="px-0 py-0" />
         <div className="mx-auto mt-12 flex max-w-[1480px] flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.18em] text-aspen">
@@ -46,6 +47,7 @@ export default function IncomeEstimatorPage() {
           />
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }
