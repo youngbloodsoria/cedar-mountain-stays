@@ -54,6 +54,7 @@ export function HomesExplorer() {
       try {
         const response = await fetch("/api/properties?limit=all&images=5", {
           headers: { Accept: "application/json" },
+          cache: "no-store",
         });
         const data = (await response.json()) as PropertiesResponse;
 

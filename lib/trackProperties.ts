@@ -157,6 +157,16 @@ function stringFromCustom(custom: TrackUnit["custom"], key: string): string {
   return typeof value === "string" ? value : "";
 }
 
+function searchableText(values: Array<string | null | undefined>): string {
+  return values
+    .filter(Boolean)
+    .join(" ")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
 function amenityTextFor(unit: TrackUnit): string {
   return [
     unit.amenityDescription,
@@ -170,10 +180,72 @@ function amenityTextFor(unit: TrackUnit): string {
     stringFromCustom(unit.custom, "pms_units_pet_friendly_property_instructions"),
     unit.name,
     unit.shortName,
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
+  ].join(" ").toLowerCase();
+}
+
+function hasAny(text: string, patterns: RegExp[]): boolean {
+  return patterns.some((pattern) => pattern.test(text));
+}
+
+function hasPetFriendlyEvidence(unit: TrackUnit): boolean {
+  const petInstructions = stringFromCustom(
+    unit.custom,
+    "pms_units_pet_friendly_property_instructions"
+  );
+  const petText = searchableText([
+    petInstructions,
+    unit.amenityDescription,
+    unit.longDescription,
+    unit.channelDescription,
+  ]);
+
+  if (
+    hasAny(petText, [
+      /\bno pets\b/,
+      /\bnot pet[- ]?friendly\b/,
+      /\bpets (?:are )?not allowed\b/,
+      /\bdogs (?:are )?not allowed\b/,
+    ])
+  ) {
+    return false;
+  }
+
+  return (
+    petInstructions.trim().length > 0 ||
+    hasAny(petText, [
+      /\bpet[- ]?friendly\b/,
+      /\bpets allowed\b/,
+      /\bdog[- ]?friendly\b/,
+      /\bdogs allowed\b/,
+    ])
+  );
+}
+
+function hasHotTubEvidence(unit: TrackUnit): boolean {
+  const hotTubText = searchableText([
+    unit.amenityDescription,
+    stringFromCustom(unit.custom, "pms_units_pool_or_hot_tub_service_notes"),
+    stringFromCustom(unit.custom, "pms_units_other_amenity_instructions"),
+    unit.longDescription,
+    unit.channelDescription,
+  ]);
+
+  if (
+    hasAny(hotTubText, [
+      /\bno hot tub\b/,
+      /\bhot tub (?:is )?(?:not )?available\b/,
+      /\bhot tub unavailable\b/,
+    ])
+  ) {
+    return false;
+  }
+
+  return hasAny(hotTubText, [
+    /\bhot tub\b/,
+    /\bjacuzzi\b/,
+    /\bjetted tub\b/,
+    /\bspa tub\b/,
+  ]);
 }
 
 function propertyFilters(unit: TrackUnit): PublicProperty["filters"] {
@@ -189,16 +261,13 @@ function propertyFilters(unit: TrackUnit): PublicProperty["filters"] {
     .toLowerCase();
 
   return {
-    hotTub: amenityText.includes("hot tub") || amenityText.includes("spa"),
+    hotTub: hasHotTubEvidence(unit),
     skiAccess:
       amenityText.includes("ski-in") ||
       amenityText.includes("ski in") ||
       amenityText.includes("ski access") ||
       amenityText.includes("lift"),
-    petFriendly:
-      Boolean(unit.maxPets) ||
-      amenityText.includes("pet friendly") ||
-      amenityText.includes("pets allowed"),
+    petFriendly: hasPetFriendlyEvidence(unit),
     fireplace:
       amenityText.includes("fireplace") ||
       amenityText.includes("wood stove") ||
