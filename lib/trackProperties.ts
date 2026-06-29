@@ -34,11 +34,18 @@ type TrackUnit = {
   threeQuarterBathrooms?: number | null;
   halfBathrooms?: number | null;
   maxPets?: number | null;
+  petFriendly?: boolean | number | string | null;
+  isPetFriendly?: boolean | number | string | null;
+  allowsPets?: boolean | number | string | null;
   amenityDescription?: string | null;
   custom?: Record<string, unknown> | null;
   _embedded?: {
     lodgingType?: { name?: string | null };
-    type?: { name?: string | null };
+    node?: { petFriendly?: boolean | number | string | null };
+    type?: {
+      name?: string | null;
+      petFriendly?: boolean | number | string | null;
+    };
   };
   _links?: TrackLinks;
 };
@@ -187,7 +194,52 @@ function hasAny(text: string, patterns: RegExp[]): boolean {
   return patterns.some((pattern) => pattern.test(text));
 }
 
+function booleanValue(value: unknown): boolean | null {
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  if (typeof value === "number") {
+    if (value === 1) {
+      return true;
+    }
+
+    if (value === 0) {
+      return false;
+    }
+  }
+
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase();
+    if (["true", "1", "yes", "y", "t", "enabled"].includes(normalized)) {
+      return true;
+    }
+
+    if (["false", "0", "no", "n", "f", "disabled"].includes(normalized)) {
+      return false;
+    }
+  }
+
+  return null;
+}
+
 function hasPetFriendlyEvidence(unit: TrackUnit): boolean {
+  const explicitPetFields = [
+    unit.petFriendly,
+    unit._embedded?.type?.petFriendly,
+    unit._embedded?.node?.petFriendly,
+    unit.isPetFriendly,
+    unit.allowsPets,
+  ];
+
+  for (const field of explicitPetFields) {
+    const parsed = booleanValue(field);
+
+    if (parsed !== null) {
+      return parsed;
+    }
+  }
+
   const petInstructions = stringFromCustom(
     unit.custom,
     "pms_units_pet_friendly_property_instructions"
@@ -202,6 +254,8 @@ function hasPetFriendlyEvidence(unit: TrackUnit): boolean {
   if (
     hasAny(petText, [
       /\bno pets\b/,
+      /\bno dogs\b/,
+      /\bno animals\b/,
       /\bnot pet[- ]?friendly\b/,
       /\bpets (?:are )?not allowed\b/,
       /\bdogs (?:are )?not allowed\b/,
