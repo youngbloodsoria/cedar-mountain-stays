@@ -13,7 +13,7 @@ const footerColumns = [
     links: [
       ["Homes", "/homes"],
       ["Destinations", "/#destinations"],
-      ["Experiences", "/#experiences"],
+      ["Experiences", "/experiences"],
       ["Income Estimator", "/income-estimator"],
     ],
   },

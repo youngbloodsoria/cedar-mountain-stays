@@ -5,7 +5,7 @@ import cedarLogo from "../../assets/team-page/cedarmountainstays-logo.png";
 const navItems = [
   ["Homes", "/homes"],
   ["Destinations", "/#destinations"],
-  ["Experiences", "/#experiences"],
+  ["Experiences", "/experiences"],
   ["Why Cedar Mountain", "/why-cedar-mountain"],
   ["Team", "/team"],
   ["Owners", "/#owners"],
@@ -15,7 +15,7 @@ const navItems = [
 
 export function SiteNav({ tone = "dark" }: { tone?: "dark" | "light" }) {
   return (
-    <div className="mx-auto flex max-w-[1480px] flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto flex max-w-[1480px] flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
       <Link
         className="inline-flex items-center"
         href="/"
@@ -29,23 +29,31 @@ export function SiteNav({ tone = "dark" }: { tone?: "dark" | "light" }) {
         />
       </Link>
 
-      <nav
-        className={`flex flex-wrap gap-x-4 gap-y-3 text-[0.68rem] font-extrabold uppercase tracking-[0.12em] sm:gap-x-6 sm:text-xs sm:tracking-[0.14em] ${
-          tone === "light" ? "text-forest/78" : "text-white/74"
-        }`}
-      >
-        {navItems.map(([label, href]) => (
-          <Link
-            key={label}
-            className={`transition ${
-              tone === "light" ? "hover:text-cedar" : "hover:text-white"
-            }`}
-            href={href}
-          >
-            {label}
-          </Link>
-        ))}
-      </nav>
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
+        <nav
+          className={`flex flex-wrap gap-x-4 gap-y-3 text-[0.68rem] font-extrabold uppercase tracking-[0.12em] sm:gap-x-6 sm:text-xs sm:tracking-[0.14em] ${
+            tone === "light" ? "text-forest/82" : "text-white/84"
+          }`}
+        >
+          {navItems.map(([label, href]) => (
+            <Link
+              key={label}
+              className={`transition ${
+                tone === "light" ? "hover:text-cedar" : "hover:text-white"
+              }`}
+              href={href}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+        <Link
+          href="/homes"
+          className="inline-flex w-fit items-center justify-center rounded bg-cedar px-6 py-4 text-xs font-extrabold uppercase tracking-[0.1em] text-white shadow-sm transition hover:bg-aspen hover:text-forest"
+        >
+          Book Your Stay
+        </Link>
+      </div>
     </div>
   );
 }
