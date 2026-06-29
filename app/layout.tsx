@@ -17,6 +17,14 @@ export const metadata: Metadata = {
   title: "Cedar Mountain Stays | Southern Utah Mountain Retreats",
   description:
     "Luxury cabins and mountain retreats for adventure-filled stays in Southern Utah.",
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.ico", sizes: "32x32" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
