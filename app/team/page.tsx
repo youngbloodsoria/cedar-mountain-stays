@@ -95,16 +95,12 @@ export default function TeamPage() {
               className="aspect-[31/26] h-full w-full rounded object-cover object-center"
               sizes="(min-width: 1024px) 50vw, 100vw"
             />
-            <div className="absolute inset-x-0 bottom-5 flex justify-center sm:bottom-6">
-              <div className="rounded-full bg-forest/72 px-3 py-1.5 shadow-soft ring-1 ring-white/18 backdrop-blur-sm sm:px-4 sm:py-2">
-                <Image
-                  src={cedarLogo}
-                  alt=""
-                  aria-hidden="true"
-                  className="h-12 w-auto sm:h-16"
-                />
-              </div>
-            </div>
+            <Image
+              src={cedarLogo}
+              alt=""
+              aria-hidden="true"
+              className="absolute bottom-4 left-1/2 h-16 w-auto -translate-x-1/2 drop-shadow-[0_10px_24px_rgba(16,37,31,0.5)] sm:h-20"
+            />
           </div>
         </div>
       </header>
