@@ -22,12 +22,23 @@ import {
 } from "lucide-react";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
+import { JsonLd } from "../components/JsonLd";
 import homepageHero from "../../assets/home-page/hompage-hero.png";
+import { absoluteUrl, breadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Experiences | Cedar Mountain Stays",
+  title: "Southern Utah Mountain Experiences",
   description:
-    "Explore Southern Utah mountain adventures, seasons, and destinations with Cedar Mountain Stays.",
+    "Discover Brian Head skiing, snowboarding, hiking, mountain biking, fishing, stargazing, and Southern Utah day trips from Cedar Mountain Stays.",
+  alternates: {
+    canonical: absoluteUrl("/experiences"),
+  },
+  openGraph: {
+    title: "Southern Utah Mountain Experiences",
+    description:
+      "Plan winter and summer adventures near Brian Head, Duck Creek, Panguitch Lake, Cedar Breaks, Bryce Canyon, and Zion.",
+    url: absoluteUrl("/experiences"),
+  },
 };
 
 const winterImage =
@@ -170,6 +181,12 @@ const seasons = [
 export default function ExperiencesPage() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Experiences", path: "/experiences" },
+        ])}
+      />
       <section
         className="relative min-h-screen overflow-hidden bg-forest text-white"
       >

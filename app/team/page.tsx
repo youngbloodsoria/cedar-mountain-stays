@@ -3,19 +3,36 @@ import Image from "next/image";
 import { Mail, MapPin } from "lucide-react";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
+import { JsonLd } from "../components/JsonLd";
 import { TeamProfiles } from "../components/TeamProfiles";
 import teamPhoto from "../../assets/team-page/team-photo-2-cropped.png";
 import cedarLogo from "../../assets/team-page/cedarmountainstays-logo.png";
+import { absoluteUrl, breadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Our Team | Cedar Mountain Stays",
+  title: "Our Southern Utah Hospitality Team",
   description:
-    "Meet the local hospitality team behind Cedar Mountain Stays in Southern Utah.",
+    "Meet the local Cedar Mountain Stays team caring for Southern Utah vacation homes, guest experiences, housekeeping, owner communication, and operations.",
+  alternates: {
+    canonical: absoluteUrl("/team"),
+  },
+  openGraph: {
+    title: "Our Southern Utah Hospitality Team",
+    description:
+      "Meet the people behind Cedar Mountain Stays and the local operations team serving Brian Head and nearby mountain communities.",
+    url: absoluteUrl("/team"),
+  },
 };
 
 export default function TeamPage() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Team", path: "/team" },
+        ])}
+      />
       <header className="bg-forest px-5 py-6 text-white sm:px-8 lg:px-12">
         <SiteHeader className="px-0 py-0" />
         <div className="mx-auto grid max-w-[1480px] gap-10 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-16">

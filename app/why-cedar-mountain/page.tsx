@@ -20,11 +20,22 @@ import {
 } from "lucide-react";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
+import { JsonLd } from "../components/JsonLd";
+import { absoluteUrl, breadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Why Cedar Mountain | Cedar Mountain Stays",
+  title: "Why Cedar Mountain",
   description:
-    "How Cedar Mountain Stays protects owner investments through housekeeping, customer service, and technology.",
+    "How Cedar Mountain Stays protects Southern Utah vacation homes through housekeeping, customer service, owner communication, and technology.",
+  alternates: {
+    canonical: absoluteUrl("/why-cedar-mountain"),
+  },
+  openGraph: {
+    title: "Why Cedar Mountain",
+    description:
+      "Learn how Cedar Mountain Stays cares for homes, protects owner investments, supports guests, and operates differently in Southern Utah.",
+    url: absoluteUrl("/why-cedar-mountain"),
+  },
 };
 
 const heroImage =
@@ -85,6 +96,12 @@ const ownerValues = [
 export default function WhyCedarMountainPage() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Why Cedar Mountain", path: "/why-cedar-mountain" },
+        ])}
+      />
       <section className="relative overflow-hidden bg-cream">
         <div
           aria-hidden="true"

@@ -12,13 +12,29 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import homepageHero from "../assets/home-page/hompage-hero.png";
 import { FeaturedHomes } from "./components/FeaturedHomes";
 import { IncomeEstimator } from "./components/IncomeEstimator";
+import { JsonLd } from "./components/JsonLd";
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteNav } from "./components/SiteNav";
+import { absoluteUrl, breadcrumbJsonLd, siteDescription, siteName } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Southern Utah Mountain Retreats",
+  description: siteDescription,
+  alternates: {
+    canonical: absoluteUrl("/"),
+  },
+  openGraph: {
+    title: `${siteName} | Southern Utah Mountain Retreats`,
+    description: siteDescription,
+    url: absoluteUrl("/"),
+  },
+};
 
 const destinationCards = [
   {
@@ -73,6 +89,7 @@ const operations = [
 export default function Home() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
+      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }])} />
       <section className="relative min-h-[92vh] overflow-hidden bg-forest text-white">
         <Image
           src={homepageHero}
