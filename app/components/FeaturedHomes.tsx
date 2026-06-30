@@ -7,8 +7,10 @@ import type { PublicProperty } from "@/lib/trackProperties";
 const fallbackHomes: PublicProperty[] = [
   {
     id: 1,
+    slug: "ridgeview-chalet-1",
     name: "Ridgeview Chalet",
     description: "A mountain retreat close to Southern Utah adventure.",
+    fullDescription: "A mountain retreat close to Southern Utah adventure.",
     bookingUrl: "https://skyrun.com/brian-head/",
     location: "Brian Head",
     imageUrl:
@@ -34,8 +36,10 @@ const fallbackHomes: PublicProperty[] = [
   },
   {
     id: 2,
+    slug: "the-ponderosa-2",
     name: "The Ponderosa",
     description: "A warm cabin stay built around mountain days.",
+    fullDescription: "A warm cabin stay built around mountain days.",
     bookingUrl: "https://skyrun.com/brian-head/",
     location: "Brian Head",
     imageUrl:
@@ -61,8 +65,10 @@ const fallbackHomes: PublicProperty[] = [
   },
   {
     id: 3,
+    slug: "aspen-ridge-cabin-3",
     name: "Aspen Ridge Cabin",
     description: "A quiet basecamp for Brian Head exploration.",
+    fullDescription: "A quiet basecamp for Brian Head exploration.",
     bookingUrl: "https://skyrun.com/brian-head/",
     location: "Brian Head",
     imageUrl:
@@ -137,9 +143,9 @@ export function FeaturedHomes() {
           <article key={home.id} className="overflow-hidden rounded bg-white shadow-sm">
             <a
               className="group relative block h-64 overflow-hidden"
-              href={home.bookingUrl}
-              rel="noopener noreferrer"
-              target="_blank"
+              href={hasSkyRunHomes ? `/homes/${home.slug}` : home.bookingUrl}
+              rel={hasSkyRunHomes ? undefined : "noopener noreferrer"}
+              target={hasSkyRunHomes ? undefined : "_blank"}
               aria-label={`View the full profile and book ${home.name}`}
             >
               <div
@@ -188,9 +194,9 @@ export function FeaturedHomes() {
                 ))}
               </div>
               <a
-                href={home.bookingUrl}
-                rel="noopener noreferrer"
-                target="_blank"
+                href={hasSkyRunHomes ? `/homes/${home.slug}` : home.bookingUrl}
+                rel={hasSkyRunHomes ? undefined : "noopener noreferrer"}
+                target={hasSkyRunHomes ? undefined : "_blank"}
                 className="mt-5 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.12em] text-cedar transition hover:text-forest"
               >
                 View full profile and book

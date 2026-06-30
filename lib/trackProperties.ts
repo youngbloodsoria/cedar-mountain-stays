@@ -57,8 +57,10 @@ export type PublicPropertyImage = {
 
 export type PublicProperty = {
   id: number;
+  slug: string;
   name: string;
   description: string;
+  fullDescription: string;
   bookingUrl: string;
   location: string;
   imageUrl: string;
@@ -79,6 +81,18 @@ export type PublicProperty = {
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=85";
+
+export function propertySlug(name: string, id: number): string {
+  const base = name
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80)
+    .replace(/-+$/g, "");
+
+  return `${base || "mountain-retreat"}-${id}`;
+}
 
 function rowsFromCollection<T>(
   payload: TrackCollection<T>,
@@ -369,7 +383,7 @@ function plainText(value: string | null | undefined): string {
     .trim();
 }
 
-function descriptionFor(unit: TrackUnit): string {
+function fullDescriptionFor(unit: TrackUnit): string {
   const description =
     plainText(unit.channelDescription) ||
     plainText(unit.longDescription) ||
@@ -378,6 +392,12 @@ function descriptionFor(unit: TrackUnit): string {
   if (!description) {
     return "A mountain retreat close to Southern Utah adventure.";
   }
+
+  return description;
+}
+
+function descriptionFor(unit: TrackUnit): string {
+  const description = fullDescriptionFor(unit);
 
   return description.length > 280
     ? `${description.slice(0, 277).trim()}...`
@@ -432,6 +452,7 @@ async function fetchUnits(): Promise<TrackUnit[]> {
 }
 
 function toPublicProperty(unit: TrackUnit, images: TrackImage[]): PublicProperty {
+  const name = unit.name?.trim() || unit.shortName?.trim() || "Brian Head Retreat";
   const bedrooms = numberValue(unit.bedrooms);
   const sleeps = numberValue(unit.maxOccupancy) || Math.max(bedrooms * 2, 1);
   const tags = propertyTags(unit);
@@ -450,8 +471,10 @@ function toPublicProperty(unit: TrackUnit, images: TrackImage[]): PublicProperty
 
   return {
     id: unit.id,
-    name: unit.name?.trim() || unit.shortName?.trim() || "Brian Head Retreat",
+    slug: propertySlug(name, unit.id),
+    name,
     description: descriptionFor(unit),
+    fullDescription: fullDescriptionFor(unit),
     bookingUrl: normalizeBookingUrl(unit.websiteUrl),
     location: normalizeLocation(unit),
     imageUrl: primaryImage?.url || FALLBACK_IMAGE,
@@ -484,4 +507,29 @@ export async function getFeaturedProperties(
   );
 
   return properties;
+}
+
+export async function getPropertyBySlug(
+  slug: string,
+  imageLimit = 12
+): Promise<PublicProperty | null> {
+  const safeImageLimit = Math.min(Math.max(imageLimit, 1), 20);
+  const units = (await fetchUnits())
+    .filter((unit) => unit.isActive !== false)
+    .filter((unit) => unit.isBookable !== false)
+    .filter((unit) => unit.websiteUrl);
+  const unit = units.find((candidate) => {
+    const name =
+      candidate.name?.trim() ||
+      candidate.shortName?.trim() ||
+      "Brian Head Retreat";
+
+    return propertySlug(name, candidate.id) === slug;
+  });
+
+  if (!unit) {
+    return null;
+  }
+
+  return toPublicProperty(unit, await fetchUnitImages(unit, safeImageLimit));
 }

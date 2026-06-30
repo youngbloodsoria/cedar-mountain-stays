@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getFeaturedProperties } from "@/lib/trackProperties";
 import { absoluteUrl } from "@/lib/seo";
 
 const routes = [
@@ -10,13 +11,22 @@ const routes = [
   { path: "/income-estimator", priority: 0.65, changeFrequency: "monthly" },
 ] as const;
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
+  const properties = await getFeaturedProperties(80, 1).catch(() => []);
 
-  return routes.map((route) => ({
-    url: absoluteUrl(route.path),
-    lastModified,
-    changeFrequency: route.changeFrequency,
-    priority: route.priority,
-  }));
+  return [
+    ...routes.map((route) => ({
+      url: absoluteUrl(route.path),
+      lastModified,
+      changeFrequency: route.changeFrequency,
+      priority: route.priority,
+    })),
+    ...properties.map((property) => ({
+      url: absoluteUrl(`/homes/${property.slug}`),
+      lastModified,
+      changeFrequency: "daily" as const,
+      priority: 0.8,
+    })),
+  ];
 }

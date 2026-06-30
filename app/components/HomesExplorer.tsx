@@ -12,6 +12,7 @@ import {
   Trees,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
@@ -285,10 +286,8 @@ function PropertyCard({ property }: { property: PublicProperty }) {
 
   return (
     <article className="overflow-hidden rounded bg-white shadow-sm">
-      <a
-        href={property.bookingUrl}
-        rel="noopener noreferrer"
-        target="_blank"
+      <Link
+        href={`/homes/${property.slug}`}
         className="group relative block h-72 overflow-hidden bg-forest"
       >
         <div
@@ -304,7 +303,7 @@ function PropertyCard({ property }: { property: PublicProperty }) {
           className="absolute right-4 top-4 h-6 w-6 text-white drop-shadow"
           aria-hidden="true"
         />
-      </a>
+      </Link>
 
       <div className="grid grid-cols-5 gap-1 bg-white p-1">
         {property.images.slice(0, 5).map((image, index) => (
@@ -352,15 +351,13 @@ function PropertyCard({ property }: { property: PublicProperty }) {
             </span>
           ))}
         </div>
-        <a
-          href={property.bookingUrl}
-          rel="noopener noreferrer"
-          target="_blank"
+        <Link
+          href={`/homes/${property.slug}`}
           className="mt-5 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.12em] text-cedar transition hover:text-forest"
         >
           View full profile and book
           <ExternalLink className="h-4 w-4" aria-hidden="true" />
-        </a>
+        </Link>
       </div>
     </article>
   );
